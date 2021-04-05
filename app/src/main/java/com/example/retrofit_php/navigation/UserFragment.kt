@@ -225,59 +225,12 @@ class UserFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        Log.d("userfragment", "onAttach")
-
-        super.onAttach(context)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("userfragment", "onCreate")
-
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        Log.d("userfragment", "onActivityCreated")
-
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onStart() {
         Log.d("userfragment", "onStart")
         getUserInfo()
         super.onStart()
     }
 
-    override fun onPause() {
-        Log.d("userfragment", "onPause")
-
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("userfragment", "onStop")
-
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        Log.d("userfragment", "onDestroyView")
-
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        Log.d("userfragment", "onDestroy")
-
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        Log.d("userfragment", "onDetach")
-
-        super.onDetach()
-    }
 
     override fun onResume() {
         Log.d("userfragment", "onResume")

@@ -9,6 +9,8 @@ import com.example.retrofit_php.R
 import com.example.retrofit_php.model.Interfaces.Repository
 import com.example.retrofit_php.model.Interfaces.UpdateUserInfo
 import com.example.retrofit_php.model.data.UserData
+import com.example.retrofit_php.navigation.UserFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_user_info_update.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -110,7 +112,7 @@ class UserInfoUpdate : AppCompatActivity() {
         })
 
 
-        finish()
+       finish()
 
     }
 

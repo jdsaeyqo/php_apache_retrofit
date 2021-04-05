@@ -1,17 +1,25 @@
 package com.example.retrofit_php.navigation
 
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.retrofit_php.R
-import com.example.retrofit_php.controller.MatchingActivity
 import com.example.retrofit_php.controller.UserInfoUpdate
 import com.example.retrofit_php.model.Interfaces.GetUserInfoInterface
 import com.example.retrofit_php.model.Interfaces.Repository
@@ -25,28 +33,28 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 import java.util.*
 import kotlin.collections.ArrayList
 
 class UserFragment : Fragment() {
 
     var fragmentView: View? = null
-   lateinit var email : String
+    lateinit var email: String
     private lateinit var userData: UserData
-    private lateinit var getuserinfoapi : GetUserInfoInterface
+    private lateinit var getuserinfoapi: GetUserInfoInterface
+    private lateinit var swipeRefreshLayout : SwipeRefreshLayout
 
     companion object {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        
-       // TODO UserFragment 실행 시 로딩 걸리는 시간 동안 프로그레스바 구현하기
+
 
         fragmentView =
             LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
@@ -57,7 +65,9 @@ class UserFragment : Fragment() {
             openGallery()
         }
 
-        Log.d("userfragment","onCreateView")
+        Log.d("userfragment", "onCreateView")
+
+
         getProfileImage()
         getUserInfo()
 
@@ -67,31 +77,38 @@ class UserFragment : Fragment() {
 
         }
 
+        swipeRefreshLayout = fragmentView!!.findViewById(R.id.swipeLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            getUserInfo()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         return fragmentView
     }
 
+
     private fun sendTextandStartUpdateAvtivity() {
-        val intent = Intent(activity,UserInfoUpdate::class.java)
+        val intent = Intent(activity, UserInfoUpdate::class.java)
 
-        intent.putExtra("email",userData.email)
+        intent.putExtra("email", userData.email)
 
-        if(textNickname.text != ""){
-            intent.putExtra("nickname",userData.nickname)
+        if (textNickname.text != "") {
+            intent.putExtra("nickname", userData.nickname)
         }
-        if(textAge.text !=""){
-            intent.putExtra("age",userData.age)
+        if (textAge.text != "") {
+            intent.putExtra("age", userData.age)
         }
-        if(textJob.text != ""){
-            intent.putExtra("job",userData.job)
+        if (textJob.text != "") {
+            intent.putExtra("job", userData.job)
         }
-        if(textInterest1.text != ""){
-            intent.putExtra("interest1",userData.interest1)
+        if (textInterest1.text != "") {
+            intent.putExtra("interest1", userData.interest1)
         }
-        if(textInterest2.text != ""){
-            intent.putExtra("interest2",userData.interest2)
+        if (textInterest2.text != "") {
+            intent.putExtra("interest2", userData.interest2)
         }
-        if(textInterest3.text!= ""){
-            intent.putExtra("interest3",userData.interest3)
+        if (textInterest3.text != "") {
+            intent.putExtra("interest3", userData.interest3)
         }
 
         startActivity(intent)
@@ -99,16 +116,17 @@ class UserFragment : Fragment() {
 
     private fun getUserInfo() {
 
+
         val retrofit = Repository.getApiClient()
 
-        if(retrofit != null){
-        getuserinfoapi = retrofit.create(GetUserInfoInterface::class.java)
+        if (retrofit != null) {
+            getuserinfoapi = retrofit.create(GetUserInfoInterface::class.java)
         }
 
-        val call : Call<String> = getuserinfoapi.getUserData(email)
-        call.enqueue(object : Callback<String>{
+        val call: Call<String> = getuserinfoapi.getUserData(email)
+        call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
-                if(response.isSuccessful && response.body()!=null){
+                if (response.isSuccessful && response.body() != null) {
                     Log.e("onSuccess1", response.body()!!)
 
                     val jsonResponse = response.body()
@@ -118,7 +136,7 @@ class UserFragment : Fragment() {
                             val jsonObject = JSONObject(data)
 
                             val dataArray = jsonObject.getJSONArray("data")
-                            for (i in 0 until dataArray.length()){
+                            for (i in 0 until dataArray.length()) {
                                 val dataobj = dataArray.getJSONObject(i)
 
 
@@ -130,7 +148,7 @@ class UserFragment : Fragment() {
                                 val interest3 = dataobj.getString("interest3")
 
                                 userData = UserData(
-                                    email, nickname, age, job, interest1,interest2,interest3
+                                    email, nickname, age, job, interest1, interest2, interest3
                                 )
                                 setUserData(userData)
 
@@ -149,30 +167,34 @@ class UserFragment : Fragment() {
 
         })
 
+
     }
 
     private fun setUserData(userData: UserData) {
 
-        if(userData.nickname != "null"){
+        if (userData.nickname != "null") {
             textNickname.text = userData.nickname
         }
-        if(userData.age != "null"){
+        if (userData.age != "null") {
             textAge.text = userData.age
         }
-        if(userData.job != "null"){
+        if (userData.job != "null") {
             textJob.text = userData.job
         }
-        if(userData.interest1 != "null"){
+        if (userData.interest1 != "null") {
             textInterest1.text = userData.interest1
         }
-        if(userData.interest2 != "null"){
+        if (userData.interest2 != "null") {
             textInterest2.text = userData.interest2
         }
-        if(userData.interest3 != "null"){
+        if (userData.interest3 != "null") {
             textInterest3.text = userData.interest3
         }
 
+        fragmentView!!.progressBar.visibility = View.GONE
+
     }
+
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
@@ -203,8 +225,62 @@ class UserFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        Log.d("userfragment", "onAttach")
+
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("userfragment", "onCreate")
+
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        Log.d("userfragment", "onActivityCreated")
+
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onStart() {
+        Log.d("userfragment", "onStart")
+        getUserInfo()
+        super.onStart()
+    }
+
+    override fun onPause() {
+        Log.d("userfragment", "onPause")
+
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Log.d("userfragment", "onStop")
+
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        Log.d("userfragment", "onDestroyView")
+
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.d("userfragment", "onDestroy")
+
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        Log.d("userfragment", "onDetach")
+
+        super.onDetach()
+    }
+
     override fun onResume() {
-        Log.d("userfragment","onResume")
+        Log.d("userfragment", "onResume")
         getUserInfo()
         super.onResume()
 

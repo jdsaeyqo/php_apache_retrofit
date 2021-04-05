@@ -23,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var name : String
     lateinit var email : String
-    lateinit var interest : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

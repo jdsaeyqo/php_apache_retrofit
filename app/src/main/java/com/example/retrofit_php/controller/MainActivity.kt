@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     lateinit var userData: UserData
+    lateinit var userEmail : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,15 +37,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private fun userDataUpdate() {
 
-        val info = intent.getParcelableExtra<UserData>("userdata")
-        if (info != null) {
-            userData = UserData(
-                email = info.email,
-            )
-            Log.d("userData",userData.email.toString())
-        }
+        userData = intent.getParcelableExtra<UserData>("userdata")!!
+        userEmail=userData.email.toString()
 
-
+            Log.d("MainActivityUserEmail",userData.email.toString())
 
     }
 
@@ -90,22 +86,22 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when(requestCode){
 
             UserFragment.PICK_PROFILE_FROM_ALBUM ->{
-                val ImageUri : Uri? = data?.data
-                val useremail =intent.getParcelableExtra<UserData>("userdata")?.email
+                val imageUri : Uri? = data?.data
+
 
                 val storageRef =
-                    useremail?.let {
+                    userEmail.let {
                         FirebaseStorage.getInstance().reference.child("profileImages").child(
                             it
                         )
                     }
-                if (ImageUri != null) {
-                    storageRef?.putFile(ImageUri)?.continueWithTask {
+                if (imageUri != null) {
+                    storageRef.putFile(imageUri).continueWithTask {
                         return@continueWithTask storageRef.downloadUrl
-                    }?.addOnSuccessListener {
+                    }.addOnSuccessListener {
                         val map = HashMap<String,Any>()
                         map["image"] = it.toString()
-                        FirebaseFirestore.getInstance().collection("profileImages").document(useremail).set(map)
+                        FirebaseFirestore.getInstance().collection("profileImages").document(userEmail).set(map)
 
                     }
 

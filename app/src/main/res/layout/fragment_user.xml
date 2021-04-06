@@ -21,6 +21,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_marginTop="5dp"
+                android:textColor="#B8AEAE"
+                android:text="아래로 밀어 새로고침"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/userProfileImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
 
             <ImageView
                 android:id="@+id/userProfileImage"
@@ -33,6 +44,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
+                android:id="@+id/likelayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
@@ -119,7 +131,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
 
                 <TextView
@@ -161,15 +174,31 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textAge" />
 
+                <TextView
+                    android:textSize="20dp"
+                    android:id="@+id/myinterest"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="30dp"
+                    android:text="나의 관심사"
+                    app:layout_constraintTop_toBottomOf="@id/textJob"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
                 <LinearLayout
+
                     android:id="@+id/userinterest"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_margin="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="50dp"
                     android:orientation="horizontal"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textJob">
+                    app:layout_constraintTop_toBottomOf="@id/myinterest">
 
                     <TextView
                         android:id="@+id/textInterest1"
@@ -207,12 +236,12 @@
                 <Button
                     android:id="@+id/updateProfile"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="50dp"
                     android:text="프로필 정보 수정"
                     app:layout_constraintLeft_toLeftOf="parent"
-
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/userinterest" />
 

@@ -1,5 +1,6 @@
 package com.example.retrofit_php.controller
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,11 +17,22 @@ import retrofit2.Response
 
 class MatchingActivity : AppCompatActivity() {
 
-    lateinit var userDATA: String
+    lateinit var userData: String
     private var email: String? = null
     private var userEmailList: MutableList<String> = mutableListOf()
 
-    private val uAdapter = UserAdapter(this, userEmailList)
+    private val uAdapter = UserAdapter(this, userEmailList){
+        itemClick(it)
+    }
+
+    private fun itemClick(email: String) {
+
+        val intent = Intent(this,UserDialogActivity::class.java)
+        intent.putExtra("email",email)
+        startActivity(intent)
+
+    }
+
     lateinit var getmatchapi: GetUserInfoInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +43,7 @@ class MatchingActivity : AppCompatActivity() {
         val lm = LinearLayoutManager(this)
         userRecyclerView.layoutManager = lm
         userRecyclerView.setHasFixedSize(true)
+
 
         getInfo()
 
@@ -50,9 +63,9 @@ class MatchingActivity : AppCompatActivity() {
 
                 if (response.isSuccessful && response.body() != null) {
 
-                    userDATA = response.body()!!.substring(5)
+                    userData = response.body()!!.substring(5)
 
-                    val jsonResponse = JSONObject(userDATA)
+                    val jsonResponse = JSONObject(userData)
 
                     val dataArray = jsonResponse.getJSONArray("data")
 
@@ -85,18 +98,18 @@ class MatchingActivity : AppCompatActivity() {
         if (retrofit != null) {
             getmatchapi = retrofit.create(GetUserInfoInterface::class.java)
         }
-        val call: Call<String>? =getmatchapi.getMatchingUser(interest1,interest2,interest3)
+        val call: Call<String> =getmatchapi.getMatchingUser(interest1,interest2,interest3)
 
-        call?.enqueue(object : Callback<String> {
+        call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
 
                 if (response.isSuccessful && response.body() != null) {
 
                     Log.d("matchAct",response.body().toString())
-                    userDATA = response.body()!!.substring(5)
+                    userData = response.body()!!.substring(5)
 
 
-                    val jsonResponse = JSONObject(userDATA)
+                    val jsonResponse = JSONObject(userData)
 
                     val dataArray = jsonResponse.getJSONArray("data")
 

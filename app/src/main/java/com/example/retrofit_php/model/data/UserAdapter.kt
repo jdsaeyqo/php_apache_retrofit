@@ -13,7 +13,7 @@ import com.example.retrofit_php.R
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
-class UserAdapter(private val context: Context, private val userList :MutableList<String>):
+class UserAdapter(private val context: Context, private val userList:MutableList<String>,val itemClick : (String) -> Unit ):
     RecyclerView.Adapter<UserAdapter.Holder>() {
 
 
@@ -50,6 +50,7 @@ class UserAdapter(private val context: Context, private val userList :MutableLis
                 }
             }
         }
+        holder.bind(userList[position])
 
     }
 
@@ -60,5 +61,9 @@ class UserAdapter(private val context: Context, private val userList :MutableLis
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val userImage: ImageView = itemView.findViewById(R.id.userImage)
         val userEmail: TextView = itemView.findViewById(R.id.userEmail)
+
+        fun bind(email : String ){
+            itemView.setOnClickListener { itemClick(email) }
+        }
     }
 }

@@ -1,20 +1,14 @@
 package com.example.retrofit_php.navigation
 
 
-import android.content.Context
+
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ProgressBar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -34,11 +28,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
 
 class UserFragment : Fragment() {
 
     var fragmentView: View? = null
+
     lateinit var email: String
     private lateinit var userData: UserData
     private lateinit var getuserinfoapi: GetUserInfoInterface
@@ -61,12 +55,11 @@ class UserFragment : Fragment() {
 
         userData = arguments?.getParcelable("userdata")!!
         email = userData.email.toString()
+
+
         fragmentView?.userProfileImage?.setOnClickListener {
             openGallery()
         }
-
-        Log.d("userfragment", "onCreateView")
-
 
         getProfileImage()
         getUserInfo()
@@ -191,7 +184,7 @@ class UserFragment : Fragment() {
             textInterest3.text = userData.interest3
         }
 
-        fragmentView!!.progressBar.visibility = View.GONE
+        progressBar.visibility = View.GONE
 
     }
 
@@ -204,8 +197,8 @@ class UserFragment : Fragment() {
 
     private fun getProfileImage() {
 
-        userData = arguments?.getParcelable("userdata")!!
-        userData.email?.let {
+
+        email.let {
             FirebaseFirestore.getInstance().collection("profileImages").document(
                 it
             ).addSnapshotListener { value, error ->
@@ -223,6 +216,8 @@ class UserFragment : Fragment() {
                 } else return@addSnapshotListener
             }
         }
+
+
     }
 
     override fun onStart() {
